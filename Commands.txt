@@ -1,0 +1,5 @@
+Start Up:
+heroku ps:scale worker=1 --app norman-ross-twitter-bot
+
+Shut Down:
+heroku ps:scale worker=0 --app norman-ross-twitter-bot
