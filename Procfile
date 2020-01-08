@@ -1,1 +1,1 @@
-worker: python RunBotTerminal-Git.py
+worker: python RunBotTerminal_Git.py
