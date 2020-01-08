@@ -1,5 +1,5 @@
 import tweepy, time, sys, datetime
-import os as environ
+from os import environ
 
 class BotInfo:
 
