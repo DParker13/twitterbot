@@ -1,5 +1,5 @@
-from Bot import Bot-Git
-from BotInfo import BotInfo-Git
+from Bot-Git import Bot
+from BotInfo-Git import BotInfo
 
 def main():
     botInfo = BotInfo()
