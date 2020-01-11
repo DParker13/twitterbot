@@ -136,7 +136,7 @@ class Bot:
 
                         #check for bot spotters or other annoying users
                         for user_filter in botInfo.filtered_users:
-                            if user_filter in user.screen_name.lower() or user_filter in user.name.encode("utf-8").lower():
+                            if user_filter in user.screen_name.lower() or user_filter in user.name.lower():
                                 tweet_passes_filter = False
                                 print("\tBot Spotter avoided: " + user.screen_name)
 
