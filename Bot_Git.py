@@ -8,7 +8,7 @@ class Bot:
             new_tweet_counter = 0
 
             for current_search in botInfo.search_words:
-                filtered_search = current_search + " -filter:retweets-filter:replies"
+                filtered_search = current_search + " -filter:retweets -filter:replies"
                 overflow_count = 0
                 current_search_counter = 0
                 already_liked_counter = 0
@@ -56,6 +56,7 @@ class Bot:
                             #self.Tag(botInfo, tweet, text, user)
                             if retweet_status != 0:
                                 self.Follow(botInfo, tweet, text, user)
+                                self.Cash_App(botInfo, text, user, id)
                                 like_status = self.Like(tweet, text)
                                 current_search_counter += 1
                                 new_tweet_counter += 1
@@ -99,7 +100,7 @@ class Bot:
 
             #runs through all custom searches and finds tweets within this search
             for current_search in botInfo.search_words:
-                filtered_search = current_search + " -filter:retweets-filter:replies"
+                filtered_search = current_search + " -filter:retweets -filter:replies"
                 overflow_count = 0
                 current_search_counter = 0
                 already_liked_counter = 0
@@ -144,6 +145,7 @@ class Bot:
                             retweet_status = self.Retweet(botInfo, tweet, text)
                             #self.Tag(botInfo, tweet, text, user)
                             if retweet_status != 0:
+                                self.Cash_App(botInfo, text, user, id)
                                 like_status = self.Like(tweet, text)
                                 current_search_counter += 1
                                 new_tweet_counter += 1
@@ -176,7 +178,7 @@ class Bot:
     def CheckFollowerCount(self, botInfo, follower_count):
         #checks follower count to remove followers if over limit
         if(follower_count >= botInfo.FOLLOWER_LIMIT):
-            followers_list = botInfo.api.followers("NormanRoss04")
+            followers_list = botInfo.api.followers(botInfo.USERNAME)
             for i in range(50):
                 try:
                     botInfo.api.destroy_friendship(followers_list[i])
@@ -226,26 +228,31 @@ class Bot:
                    print("ERROR Following")
         blah = 0
 
-    def Tag(self, botInfo, tweet, text, user):
-        followers_list = botInfo.api.followers(user)
+    def Tag(self, botInfo, text, user, id):
+        followers_list = botInfo.api.followers(user)[0:3]
+        print("Followers: ", followers_list[0].screen_name, followers_list[1].screen_name, followers_list[2].screen_name)
 
         if "tag" in text:
             people_to_tag = []
-            print("TAG FOUND")
-            if "1" in text or "one" in text:
-                people_to_tag += [followers_list[0]]
-                self.Tag_People(botInfo, user, people_to_tag, 1)
-            elif "2" in text or "two" in text:
-                people_to_tag += [followers_list[0]] + [followers_list[1]]
-                self.Tag_People(botInfo, user, people_to_tag, 2)
-            elif "3" in text or "three" in text:
-                people_to_tag += [followers_list[0]] + [followers_list[1]] + [followers_list[2]]
-                self.Tag_People(botInfo, user, people_to_tag, 3)
+            tag_index = text.index("tag")
 
-    def Tag_People(self, botInfo, user, people_to_tag, number):
-        reply = "@" + user.screen_name
+            if text.find("1", tag_index) or text.find("one", tag_index):
+                people_to_tag += [followers_list[0]]
+                self.Tag_People(botInfo, user, people_to_tag, id)
+            elif text.find("2", tag_index) or text.find("two", tag_index):
+                people_to_tag += [followers_list[0]] + [followers_list[1]]
+                self.Tag_People(botInfo, user, people_to_tag, id)
+            elif text.find("3", tag_index) or text.find("three", tag_index):
+                people_to_tag += [followers_list[0]] + [followers_list[1]] + [followers_list[2]]
+                self.Tag_People(botInfo, user, people_to_tag, id)
+            else:
+                people_to_tag += [followers_list[0]]
+                self.Tag_People(botInfo, user, people_to_tag, id)
+
+    def Tag_People(self, botInfo, user, people_to_tag, id):
+        reply = "@" + user.screen_name + "\n"
         for people in people_to_tag:
-            reply += " " + people.screen_name
+            reply += "@" + people.screen_name + " "
 
         random_reply = random.randint(0,1)
         if random_reply == 0:
@@ -253,4 +260,11 @@ class Bot:
         else:
             reply += "\n GL!"
 
+        botInfo.api.update_status(reply, id)
         print(reply)
+
+    def Cash_App(self, botInfo, text, user, id):
+        reply = "@" + user.screen_name + "\n"
+        if "cashapp" in text or "cash app" in text or "cashtag" in text:
+            reply += "$" + botInfo.CASHAPP
+            botInfo.api.update_status(reply, in_reply_to_status_id=id)
