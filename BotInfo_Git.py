@@ -35,7 +35,7 @@ class BotInfo:
 
     #defines search terms
     search_words = ["retweet to win", "retweet giveaway", "cashapp retweet giveaway", "steam giveaway retweet"]
-    filtered_words = ["bot", "b0t", "tag", "comment", "screenshot", "proof", "sugardaddy", "sugarbaby", "robux"]
+    filtered_words = ["bot", "b0t", "tag", "comment", "screenshot", "proof", "sugar", "sugardaddy", "sugarbaby", "robux", "sugar baby", "sugar momma"]
     filtered_users = ["bot", "b0t", "muckzuckerburg", "retweeejt"]
 
     #emergency stop
