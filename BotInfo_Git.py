@@ -3,17 +3,32 @@ from os import environ
 
 class BotInfo:
 
+    #bot settings to look more human
     def __init__(self):
-        #bot settings to look more human
-        self.FRIEND_LIMIT = 1901
-        self.FRIEND_RESET_LIMIT = 1400
+        #account info
+        self.USERNAME = "NormanRoss04"
+        self.CASHAPP = "NormanRoss04"
+
+        #search settings
         self.TWEET_SEARCH_LIMIT = 25
-        self.SEARCH_TIMER = 17 * 60
+        self.SEARCH_TIMER = 20 * 60
         self.LIKE_RETWEET_ONLY_TIMER = 15 * 60
         self.TWEET_LIMIT_PER_SEARCH = 5
         self.RUNS_BEFORE_SWITCH = 4
         self.OVERFLOW_SEARCH_REPEAT = 3
         self.OVERFLOW_EXTRA_SEARCHES = 20
+
+        #limits before removing old tweets or likes
+        self.TWEET_LIMIT = 3000
+        self.TWEET_RESET_LIMIT = 1000
+        self.FRIEND_LIMIT = 1901
+        self.FRIEND_RESET_LIMIT = 1400
+
+        #dates
+        self.GO_BACK_TIME = 5
+        self.DELETE_DATE = datetime.datetime.utcnow() - datetime.timedelta(days=self.GO_BACK_TIME)
+
+        #counters
         self.total_tweets_since_start = 0
 
     consumer_key = environ['CONSUMER_KEY']
@@ -35,5 +50,5 @@ class BotInfo:
     #defines search terms
     tag_list = ["tradesecretbiz", "BeatlemaniaUK", "SJB6991"]
     search_words = ["retweet to win", "retweet giveaway", "cashapp retweet giveaway", "steam giveaway retweet"]
-    filtered_words = ["bot", "b0t", "tag", "comment", "screenshot", "proof", "sugar", "sugardaddy", "sugarbaby", "robux", "sugar baby", "sugar momma", "porn", "roblox"]
+    filtered_words = ["bot", "b0t", "tag", "comment", "screenshot", "proof", "sugar", "sugardaddy", "sugarbaby", "robux", "sugar baby", "sugar momma", "porn", "roblox", "sex", "fortnite"]
     filtered_users = ["bot", "b0t", "spotter", "sp0tter", "followandrt2win", "muckzuckerburg", "retweeejt"]

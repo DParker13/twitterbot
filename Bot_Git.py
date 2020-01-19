@@ -56,7 +56,7 @@ class Bot:
                             if retweet_status != 0:
                                 self.Follow(botInfo, tweet, text, user)
                                 #self.Tag(botInfo, text, user, id)
-                                self.Cash_App(botInfo, text, user, id)
+                                self.CashApp(botInfo, text, user, id)
                                 self.Like(tweet, text)
                                 current_search_counter += 1
                                 new_tweet_counter += 1
@@ -141,7 +141,7 @@ class Bot:
 
                             if retweet_status != 0:
                                 #self.Tag(botInfo, text, user, id)
-                                self.Cash_App(botInfo, text, user, id)
+                                self.CashApp(botInfo, text, user, id)
                                 self.Like(tweet, text)
                                 current_search_counter += 1
                                 new_tweet_counter += 1
@@ -254,18 +254,18 @@ class Bot:
         elif random_reply == 1:
             reply += "\nGL!"
 
-        reply = self.Cash_App_Tag(botInfo, text, reply)
+        reply = self.CashAppTag(botInfo, text, reply)
 
         botInfo.api.update_status(reply, in_reply_to_status_id=id)
         print(reply)
 
-    def Cash_App(self, botInfo, text, user, id):
+    def CashApp(self, botInfo, text, user, id):
         if "tag" not in text:
             if "cashapp" in text or "cash app" in text or "cashtag" in text:
                 reply = "@" + user.screen_name + "\n$" + botInfo.CASHAPP
                 botInfo.api.update_status(reply, in_reply_to_status_id=id)
 
-    def Cash_App_Tag(self, botInfo, text, reply):
+    def CashAppTag(self, botInfo, text, reply):
         if "cashapp" in text or "cash app" in text or "cashtag" in text:
             reply += " $" + botInfo.CASHAPP
 
