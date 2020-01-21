@@ -21,8 +21,8 @@ class BotInfo:
         #limits before removing old tweets or likes
         self.TWEET_LIMIT = 3000
         self.TWEET_RESET_LIMIT = 1000
-        self.FRIEND_LIMIT = 1901
-        self.FRIEND_RESET_LIMIT = 1400
+        self.FRIEND_LIMIT = 2600
+        self.FRIEND_RESET_LIMIT = 1200
 
         #dates
         self.GO_BACK_TIME = 5
