@@ -11,8 +11,8 @@ class BotInfo:
 
         #search settings
         self.TWEET_SEARCH_LIMIT = 25
-        self.SEARCH_TIMER = 20 * 60
-        self.LIKE_RETWEET_ONLY_TIMER = 15 * 60
+        self.SEARCH_TIMER = 30 * 60
+        self.LIKE_RETWEET_ONLY_TIMER = 30 * 60
         self.TWEET_LIMIT_PER_SEARCH = 5
         self.RUNS_BEFORE_SWITCH = 4
         self.OVERFLOW_SEARCH_REPEAT = 3
