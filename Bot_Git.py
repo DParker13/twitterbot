@@ -14,7 +14,7 @@ class Bot:
                 already_retweeted_counter = 0
 
                 #Checks the amount of followers and decides whether or not to purge some
-                self.CheckFriendCount(botInfo)
+                #self.CheckFriendCount(botInfo)
 
                 print("\n--Search #", display_counter,"--", datetime.datetime.now().strftime("%H:%M:%S"))
 
