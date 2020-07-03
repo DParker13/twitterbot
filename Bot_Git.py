@@ -296,7 +296,7 @@ class Bot:
 
         #appends my "friends" usernames to the reply
         for people in people_to_tag:
-            reply += "@" + people.screen_name + " "
+            reply += "@" + people + " "
 
         random_reply = random.randint(0,2)
         if random_reply == 0:
