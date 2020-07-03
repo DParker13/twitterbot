@@ -279,18 +279,18 @@ class Bot:
 
             if text.find("1", tag_index) or text.find("one", tag_index):
                 people_to_tag += [followers_list[0]]
-                self.TagPeople(botInfo, user, people_to_tag, id)
+                self.TagPeople(botInfo, text, user, people_to_tag, id)
             elif text.find("2", tag_index) or text.find("two", tag_index):
                 people_to_tag += [followers_list[0]] + [followers_list[1]]
-                self.TagPeople(botInfo, user, people_to_tag, id)
+                self.TagPeople(botInfo, text, user, people_to_tag, id)
             elif text.find("3", tag_index) or text.find("three", tag_index):
                 people_to_tag += [followers_list[0]] + [followers_list[1]] + [followers_list[2]]
-                self.TagPeople(botInfo, user, people_to_tag, id)
+                self.TagPeople(botInfo, text, user, people_to_tag, id)
             else:
                 people_to_tag += [followers_list[0]]
-                self.TagPeople(botInfo, user, people_to_tag, id)
+                self.TagPeople(botInfo, text, user, people_to_tag, id)
 
-    def TagPeople(self, botInfo, user, people_to_tag, id):
+    def TagPeople(self, botInfo, text, user, people_to_tag, id):
         #adds user to the reply
         reply = "@" + user.screen_name + "\n"
 
