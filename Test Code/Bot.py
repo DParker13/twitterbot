@@ -203,8 +203,8 @@ class Bot:
                 text = tweet.full_text.lower()
 
             self.Tag(botInfo, text, user, id)
-            #print("User - screen_name: " + user.screen_name)
-            #print("URL: " + url)
+            print("User - screen_name: " + user.screen_name)
+            print("URL: " + url)
 
     def CheckLimits(self, botInfo):
         current_user = botInfo.api.get_user(botInfo.USERNAME)
@@ -277,18 +277,17 @@ class Bot:
 
             tag_index = text.index("tag")
 
-            if text.find("1", tag_index) or text.find("one", tag_index):
-                people_to_tag += [followers_list[0]]
-                self.TagPeople(botInfo, text, user, people_to_tag, id)
-            elif text.find("2", tag_index) or text.find("two", tag_index):
-                people_to_tag += [followers_list[0]] + [followers_list[1]]
-                self.TagPeople(botInfo, text, user, people_to_tag, id)
+            if text.find("2", tag_index) or text.find("two", tag_index):
+                people_to_tag.append(followers_list[0])
+                people_to_tag.append(followers_list[1])
             elif text.find("3", tag_index) or text.find("three", tag_index):
-                people_to_tag += [followers_list[0]] + [followers_list[1]] + [followers_list[2]]
-                self.TagPeople(botInfo, text, user, people_to_tag, id)
+                people_to_tag.append(followers_list[0])
+                people_to_tag.append(followers_list[1])
+                people_to_tag.append(followers_list[2])
             else:
-                people_to_tag += [followers_list[0]]
-                self.TagPeople(botInfo, text, user, people_to_tag, id)
+                people_to_tag.append(followers_list[0])
+
+            self.TagPeople(botInfo, text, user, people_to_tag, id)
 
     def TagPeople(self, botInfo, text, user, people_to_tag, id):
         #adds user to the reply
@@ -304,7 +303,7 @@ class Bot:
         elif random_reply == 1:
             reply += "\nGL!"
 
-        reply += self.CashAppTag(botInfo, text, reply)
+        reply = self.CashAppTag(botInfo, text, reply)
 
         botInfo.api.update_status(reply, in_reply_to_status_id=id)
         print(reply)

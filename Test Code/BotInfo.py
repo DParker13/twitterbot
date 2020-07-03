@@ -30,10 +30,10 @@ class BotInfo:
         #counters
         self.total_tweets_since_start = 0
 
-    consumer_key = 'jgKcJ535zMUd8H8yYibroFgFi'
-    consumer_secret = 'TxgRXsBVsPy2R6J26eMMqpuV8kM3GCHS3TM9ZRnLrlCT4z9f7W'
-    access_token = '1711405795-DyzMGIBehxXsCBnaipaCvdOtGMX79FWvq4yntx6'
-    access_token_secret = '07vqgbGf7oXfqLdKnjgbrLE06yWj7cIYAJdFW6MSXevrr'
+    consumer_key = 'rh49Ko8HT6xTosu75FlARoRVG'
+    consumer_secret = 'j7iQQJ5MKoqizW2eyfn1Z4KBk7Qb59C4VHG7bwAel4OiZe5kqJ'
+    access_token = '1711405795-SZogLj2487SkoDgk4c4cjePOWhHHL1K5NkL8jeF'
+    access_token_secret = '1HhsiuTs25wFyTI832M1ItnYIrzUOsF6VLXex8QK6FbrO'
 
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
