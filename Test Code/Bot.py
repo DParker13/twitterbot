@@ -7,19 +7,24 @@ class Bot:
             display_counter = 1
             new_tweet_counter = 0
 
+            #runs through all custom searches and finds tweets within this search
             for current_search in botInfo.search_words:
+                #adds filters to the main search word to remove retweets and replies
                 filtered_search = current_search + " -filter:retweets -filter:replies"
+
+                #initializes counters to 0 for extra info after the search
                 overflow_count = 0
                 current_search_counter = 0
                 already_retweeted_counter = 0
 
                 #Checks the amount of followers and decides whether or not to purge some
-                self.CheckFollowerCount(botInfo)
-                self.DeleteTweets(botInfo)
-                self.RemoveLikes(botInfo)
+                #self.CheckFollowerCount(botInfo)
+                #self.DeleteTweets(botInfo)
+                #self.RemoveLikes(botInfo)
 
-                print("\n--Search #", display_counter,"--", datetime.datetime.now().strftime("%H:%M:%S"))
+                print("\n--Search #", display_counter, "-- ", current_search ," --", datetime.datetime.now().strftime("%H:%M:%S"))
 
+                #tries different search sizes until tweet limit is reached or all tweets fail
                 while current_search_counter < botInfo.TWEET_LIMIT_PER_SEARCH and overflow_count <= botInfo.OVERFLOW_SEARCH_REPEAT:
                     if overflow_count != 0:
                         print("Overflow Mode----")
@@ -31,10 +36,12 @@ class Bot:
                             print("Tweet limit reached for search")
                             break
 
+                        #gathers tweet information for debugging or allowing for more information
                         user = tweet.user
                         id = tweet.id
                         url = 'https://twitter.com/' + user.screen_name +  '/status/' + str(id)
 
+                        #some tweets are longer than normal and require different ways to gather the tweet text
                         try:
                             text = tweet.retweeted_status.full_text.lower()
                         except:
@@ -90,26 +97,31 @@ class Bot:
         custom_filtered_words = botInfo.filtered_words + ["follow"]
         switch_counter = 0
 
-        self.DeleteTweets(botInfo)
-        self.RemoveLikes(botInfo)
+        #self.DeleteTweets(botInfo)
+        #self.RemoveLikes(botInfo)
 
         time.sleep(10)
         while True:
             display_counter = 1
             new_tweet_counter = 0
 
+            #checks if backupbot has run long enough to attempt running mainbot again
             if switch_counter >= botInfo.RUNS_BEFORE_SWITCH:
                 self.RunMainBot(botInfo)
 
             #runs through all custom searches and finds tweets within this search
             for current_search in botInfo.search_words:
+                #adds filters to the main search word to remove retweets and replies
                 filtered_search = current_search + " -filter:retweets -filter:replies"
+
+                #initializes counters to 0 for extra info after the search
                 overflow_count = 0
                 current_search_counter = 0
                 already_retweeted_counter = 0
 
-                print("\n--Search #", display_counter,"--", datetime.datetime.now().strftime("%H:%M:%S"))
+                print("\n--Search #", display_counter, "-- ", current_search ," --", datetime.datetime.now().strftime("%H:%M:%S"))
 
+                #tries different search sizes until tweet limit is reached or all tweets fail
                 while current_search_counter < botInfo.TWEET_LIMIT_PER_SEARCH and overflow_count <= botInfo.OVERFLOW_SEARCH_REPEAT:
                     if overflow_count != 0:
                         print("Overflow Mode----")
@@ -121,10 +133,12 @@ class Bot:
                             print("Tweet limit reached for search")
                             break
 
+                        #gathers tweet information for debugging or allowing for more information
                         user = tweet.user
                         id = tweet.id
                         url = 'https://twitter.com/' + user.screen_name +  '/status/' + str(id)
 
+                        #some tweets are longer than normal and require different ways to gather the tweet text
                         try:
                             text = tweet.retweeted_status.full_text.lower()
                         except:
@@ -142,7 +156,7 @@ class Bot:
                                 tweet_passes_filter = False
                                 print("\tBot Spotter avoided: " + user.screen_name)
 
-                        #only likes or retweets if the tweet passes all the filters
+                        #likes, retweets, or adds cashapp username if the tweet passes all the filters
                         if tweet_passes_filter == True:
                             retweet_status = self.Retweet(botInfo, tweet, text)
 
@@ -174,8 +188,9 @@ class Bot:
             print ("Total Tweets: ", botInfo.total_tweets_since_start)
             time.sleep(botInfo.LIKE_RETWEET_ONLY_TIMER)
 
+    #TEST CODE
     def TestCodeOne(self, botInfo):
-        test_search = "retweet" + " -filter:retweets -filter:replies"
+        test_search = "retweet tag" + " -filter:retweets -filter:replies"
 
         for tweet in tweepy.Cursor(botInfo.api.search, q=test_search, lang="en", since=botInfo.date_since, tweet_mode = "extended").items(1):
             user = tweet.user
@@ -187,7 +202,7 @@ class Bot:
             except:
                 text = tweet.full_text.lower()
 
-            self.CheckLimits(botInfo)
+            self.Tag(botInfo, text, user, id)
             #print("User - screen_name: " + user.screen_name)
             #print("URL: " + url)
 
@@ -254,11 +269,12 @@ class Bot:
                else:
                    print(e)
                    print("ERROR Following")
-        blah = 0
 
     def Tag(self, botInfo, text, user, id):
         if "tag" in text:
             people_to_tag = []
+            followers_list = random.sample(botInfo.tag_list, 3)
+
             tag_index = text.index("tag")
 
             if text.find("1", tag_index) or text.find("one", tag_index):
@@ -274,9 +290,12 @@ class Bot:
                 people_to_tag += [followers_list[0]]
                 self.TagPeople(botInfo, user, people_to_tag, id)
 
-    def TagPeople(self, botInfo, user, id):
+    def TagPeople(self, botInfo, user, people_to_tag, id):
+        #adds user to the reply
         reply = "@" + user.screen_name + "\n"
-        for people in botInfo.tag_list:
+
+        #appends my "friends" usernames to the reply
+        for people in people_to_tag:
             reply += "@" + people.screen_name + " "
 
         random_reply = random.randint(0,2)
@@ -285,7 +304,7 @@ class Bot:
         elif random_reply == 1:
             reply += "\nGL!"
 
-        reply = self.CashAppTag(botInfo, text, reply)
+        reply += self.CashAppTag(botInfo, text, reply)
 
         botInfo.api.update_status(reply, in_reply_to_status_id=id)
         print(reply)
@@ -298,7 +317,7 @@ class Bot:
 
     def CashAppTag(self, botInfo, text, reply):
         if "cashapp" in text or "cash app" in text or "cashtag" in text:
-            reply += " $" + botInfo.CASHAPP
+            reply += "\n$" + botInfo.CASHAPP
 
         return reply
 

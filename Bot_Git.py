@@ -7,17 +7,24 @@ class Bot:
             display_counter = 1
             new_tweet_counter = 0
 
+            #runs through all custom searches and finds tweets within this search
             for current_search in botInfo.search_words:
+                #adds filters to the main search word to remove retweets and replies
                 filtered_search = current_search + " -filter:retweets -filter:replies"
+
+                #initializes counters to 0 for extra info after the search
                 overflow_count = 0
                 current_search_counter = 0
                 already_retweeted_counter = 0
 
                 #Checks the amount of followers and decides whether or not to purge some
-                #self.CheckFriendCount(botInfo)
+                #self.CheckFollowerCount(botInfo)
+                #self.DeleteTweets(botInfo)
+                #self.RemoveLikes(botInfo)
 
-                print("\n--Search #", display_counter,"--", datetime.datetime.now().strftime("%H:%M:%S"))
+                print("\n--Search #", display_counter, "-- ", current_search ," --", datetime.datetime.now().strftime("%H:%M:%S"))
 
+                #tries different search sizes until tweet limit is reached or all tweets fail
                 while current_search_counter < botInfo.TWEET_LIMIT_PER_SEARCH and overflow_count <= botInfo.OVERFLOW_SEARCH_REPEAT:
                     if overflow_count != 0:
                         print("Overflow Mode----")
@@ -29,9 +36,12 @@ class Bot:
                             print("Tweet limit reached for search")
                             break
 
+                        #gathers tweet information for debugging or allowing for more information
                         user = tweet.user
                         id = tweet.id
+                        url = 'https://twitter.com/' + user.screen_name +  '/status/' + str(id)
 
+                        #some tweets are longer than normal and require different ways to gather the tweet text
                         try:
                             text = tweet.retweeted_status.full_text.lower()
                         except:
@@ -55,7 +65,7 @@ class Bot:
 
                             if retweet_status != 0:
                                 self.Follow(botInfo, tweet, text, user)
-                                #self.Tag(botInfo, text, user, id)
+                                self.Tag(botInfo, text, user, id)
                                 self.CashApp(botInfo, text, user, id)
                                 self.Like(tweet, text)
                                 current_search_counter += 1
@@ -87,23 +97,31 @@ class Bot:
         custom_filtered_words = botInfo.filtered_words + ["follow"]
         switch_counter = 0
 
+        #self.DeleteTweets(botInfo)
+        #self.RemoveLikes(botInfo)
+
         time.sleep(10)
         while True:
             display_counter = 1
             new_tweet_counter = 0
 
+            #checks if backupbot has run long enough to attempt running mainbot again
             if switch_counter >= botInfo.RUNS_BEFORE_SWITCH:
                 self.RunMainBot(botInfo)
 
             #runs through all custom searches and finds tweets within this search
             for current_search in botInfo.search_words:
+                #adds filters to the main search word to remove retweets and replies
                 filtered_search = current_search + " -filter:retweets -filter:replies"
+
+                #initializes counters to 0 for extra info after the search
                 overflow_count = 0
                 current_search_counter = 0
                 already_retweeted_counter = 0
 
-                print("\n--Search #", display_counter,"--", datetime.datetime.now().strftime("%H:%M:%S"))
+                print("\n--Search #", display_counter, "-- ", current_search ," --", datetime.datetime.now().strftime("%H:%M:%S"))
 
+                #tries different search sizes until tweet limit is reached or all tweets fail
                 while current_search_counter < botInfo.TWEET_LIMIT_PER_SEARCH and overflow_count <= botInfo.OVERFLOW_SEARCH_REPEAT:
                     if overflow_count != 0:
                         print("Overflow Mode----")
@@ -115,9 +133,12 @@ class Bot:
                             print("Tweet limit reached for search")
                             break
 
+                        #gathers tweet information for debugging or allowing for more information
                         user = tweet.user
                         id = tweet.id
+                        url = 'https://twitter.com/' + user.screen_name +  '/status/' + str(id)
 
+                        #some tweets are longer than normal and require different ways to gather the tweet text
                         try:
                             text = tweet.retweeted_status.full_text.lower()
                         except:
@@ -135,12 +156,12 @@ class Bot:
                                 tweet_passes_filter = False
                                 print("\tBot Spotter avoided: " + user.screen_name)
 
-                        #only likes or retweets if the tweet passes all the filters
+                        #likes, retweets, or adds cashapp username if the tweet passes all the filters
                         if tweet_passes_filter == True:
                             retweet_status = self.Retweet(botInfo, tweet, text)
 
                             if retweet_status != 0:
-                                #self.Tag(botInfo, text, user, id)
+                                self.Tag(botInfo, text, user, id)
                                 self.CashApp(botInfo, text, user, id)
                                 self.Like(tweet, text)
                                 current_search_counter += 1
@@ -167,8 +188,34 @@ class Bot:
             print ("Total Tweets: ", botInfo.total_tweets_since_start)
             time.sleep(botInfo.LIKE_RETWEET_ONLY_TIMER)
 
-    def CheckFriendCount(self, botInfo):
-        friend_count = botInfo.api.get_user(botInfo.USERNAME).friends_count
+    #TEST CODE
+    def TestCodeOne(self, botInfo):
+        test_search = "retweet tag" + " -filter:retweets -filter:replies"
+
+        for tweet in tweepy.Cursor(botInfo.api.search, q=test_search, lang="en", since=botInfo.date_since, tweet_mode = "extended").items(1):
+            user = tweet.user
+            id = tweet.id
+            url = 'https://twitter.com/' + user.screen_name +  '/status/' + str(id)
+
+            try:
+                text = tweet.retweeted_status.full_text.lower()
+            except:
+                text = tweet.full_text.lower()
+
+            self.Tag(botInfo, text, user, id)
+            #print("User - screen_name: " + user.screen_name)
+            #print("URL: " + url)
+
+    def CheckLimits(self, botInfo):
+        current_user = botInfo.api.get_user(botInfo.USERNAME)
+        friend_count = current_user.friends_count
+        tweet_count = current_user.statuses_count
+
+        self.CheckFriendCount(botInfo, friend_count)
+        self.DeleteTweets(botInfo, tweet_count)
+        self.RemoveLikes(botInfo, tweet_count)
+
+    def CheckFriendCount(self, botInfo, friend_count):
 
         #checks follower count to remove followers if over limit
         if(friend_count >= botInfo.FRIEND_LIMIT):
@@ -193,7 +240,6 @@ class Bot:
                 print('\tLiked')
             except tweepy.TweepError as e:
                 DoNothing = None
-        return 0
 
     def Retweet(self, botInfo, tweet, text):
         if "retweet" in text or "rt" in text:
@@ -223,29 +269,33 @@ class Bot:
                else:
                    print(e)
                    print("ERROR Following")
-        blah = 0
 
     def Tag(self, botInfo, text, user, id):
         if "tag" in text:
             people_to_tag = []
+            followers_list = random.sample(botInfo.tag_list, 3)
+
             tag_index = text.index("tag")
 
             if text.find("1", tag_index) or text.find("one", tag_index):
                 people_to_tag += [followers_list[0]]
-                self.Tag_People(botInfo, user, people_to_tag, id)
+                self.TagPeople(botInfo, user, people_to_tag, id)
             elif text.find("2", tag_index) or text.find("two", tag_index):
                 people_to_tag += [followers_list[0]] + [followers_list[1]]
-                self.Tag_People(botInfo, user, people_to_tag, id)
+                self.TagPeople(botInfo, user, people_to_tag, id)
             elif text.find("3", tag_index) or text.find("three", tag_index):
                 people_to_tag += [followers_list[0]] + [followers_list[1]] + [followers_list[2]]
-                self.Tag_People(botInfo, user, people_to_tag, id)
-            elif not (text.find("4", tag_index) or text.find("5", tag_index)):
+                self.TagPeople(botInfo, user, people_to_tag, id)
+            else:
                 people_to_tag += [followers_list[0]]
-                self.Tag_People(botInfo, user, people_to_tag, id)
+                self.TagPeople(botInfo, user, people_to_tag, id)
 
-    def Tag_People(self, botInfo, user, id):
+    def TagPeople(self, botInfo, user, people_to_tag, id):
+        #adds user to the reply
         reply = "@" + user.screen_name + "\n"
-        for people in botInfo.tag_list:
+
+        #appends my "friends" usernames to the reply
+        for people in people_to_tag:
             reply += "@" + people.screen_name + " "
 
         random_reply = random.randint(0,2)
@@ -254,7 +304,7 @@ class Bot:
         elif random_reply == 1:
             reply += "\nGL!"
 
-        reply = self.CashAppTag(botInfo, text, reply)
+        reply += self.CashAppTag(botInfo, text, reply)
 
         botInfo.api.update_status(reply, in_reply_to_status_id=id)
         print(reply)
@@ -267,6 +317,58 @@ class Bot:
 
     def CashAppTag(self, botInfo, text, reply):
         if "cashapp" in text or "cash app" in text or "cashtag" in text:
-            reply += " $" + botInfo.CASHAPP
+            reply += "\n$" + botInfo.CASHAPP
 
         return reply
+
+    # delete old tweets
+    def DeleteTweets(self, botInfo, tweet_count):
+        if tweet_count >= botInfo.TWEET_LIMIT:
+            try:
+                # get all timeline tweets
+                print("Deleting Tweets!")
+                timeline = tweepy.Cursor(botInfo.api.user_timeline).items()
+                deletion_count = 0
+
+                for tweet in timeline:
+                    tweet_count = botInfo.api.get_user(botInfo.USERNAME).statuses_count
+
+                    if tweet_count > botInfo.TWEET_RESET_LIMIT:
+                        if tweet.created_at < botInfo.DELETE_DATE:
+                            print("Deleting %d: [%s] %s" % (tweet.id, tweet.created_at))
+                            #api.destroy_status(tweet.id)
+
+                            deletion_count += 1
+                    else:
+                        print("Tweet deletions finished")
+                        break
+
+                print("Deleted %d tweets" % (deletion_count))
+            except tweepy.TweepError as e:
+                print("Error deleting tweets")
+
+    # unfavor old favorites
+    def RemoveLikes(self, botInfo, tweet_count):
+        if tweet_count >= botInfo.TWEET_LIMIT:
+            try:
+                # get all favorites
+                print("Removing Likes!")
+                favorites = tweepy.Cursor(botInfo.api.favorites).items()
+                unfav_count = 0
+
+                for tweet in favorites:
+                    tweet_count = botInfo.api.get_user(botInfo.USERNAME).statuses_count
+
+                    if tweet_count > botInfo.TWEET_RESET_LIMIT:
+                        if tweet.created_at < botInfo.DELETE_DATE:
+                            print("Unfavoring %d: [%s] %s" % (tweet.id, tweet.created_at, tweet.text))
+                            #api.destroy_favorite(tweet.id)
+
+                            unfav_count += 1
+                    else:
+                        print("Like removals finished!")
+                        break
+
+                print("Unfavored %d tweets" % (unfav_count))
+            except tweepy.TweepError as e:
+                print("Error deleting tweets")
