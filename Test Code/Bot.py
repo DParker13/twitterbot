@@ -277,10 +277,12 @@ class Bot:
 
             tag_index = text.index("tag")
 
-            if text.find("2", tag_index) or text.find("two", tag_index):
+            if text.find("2", tag_index) != -1 or text.find("two", tag_index) != -1:
+                print("two people")
                 people_to_tag.append(followers_list[0])
                 people_to_tag.append(followers_list[1])
-            elif text.find("3", tag_index) or text.find("three", tag_index):
+            elif text.find("3", tag_index) != -1 or text.find("three", tag_index) != -1:
+                print("three people")
                 people_to_tag.append(followers_list[0])
                 people_to_tag.append(followers_list[1])
                 people_to_tag.append(followers_list[2])
@@ -305,7 +307,7 @@ class Bot:
 
         reply = self.CashAppTag(botInfo, text, reply)
 
-        botInfo.api.update_status(reply, in_reply_to_status_id=id)
+        #botInfo.api.update_status(reply, in_reply_to_status_id=id)
         print(reply)
 
     def CashApp(self, botInfo, text, user, id):
