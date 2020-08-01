@@ -297,7 +297,7 @@ class Bot:
         for people in people_to_tag:
             reply += "@" + people + " "
 
-        random_reply = random.randint(0,2)
+        random_reply = random.randint(0,4)
         if random_reply == 0:
             reply += "\nDone!"
         elif random_reply == 1:
