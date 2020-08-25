@@ -266,6 +266,9 @@ class Bot:
                if("161" in e.response.text):
                    print("Follow limit reached!")
                    self.BackupBot(botInfo)
+               elif("261" in e.response.text):
+                   print("Follow error! Most likely API is restricted to read only")
+                   self.BackupBot(botInfo)
                else:
                    print(e)
                    print("ERROR Following")
