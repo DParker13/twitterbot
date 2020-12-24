@@ -31,14 +31,15 @@ class BotInfo:
         #counters
         self.total_tweets_since_start = 0
 
-    consumer_key = environ['CONSUMER_KEY']
-    consumer_secret = environ['CONSUMER_SECRET']
-    access_token = environ['ACCESS_KEY']
+    api_key = environ['API_KEY']
+    api_secret = environ['API_SECRET']
+    access_token = environ['ACCESS_TOKEN']
     access_token_secret = environ['ACCESS_SECRET']
+    bearer_token = environ['BEARER_TOKEN']
     USERNAME = environ['USERNAME']
     CASHAPP = environ['CASHAPP']
 
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    auth = tweepy.OAuthHandler(api_key, api_secret)
     auth.set_access_token(access_token, access_token_secret)
     api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
@@ -49,6 +50,6 @@ class BotInfo:
 
     #defines search terms
     tag_list = ["James64705453", "CHRISTYSWEENEY1", "WippydeeWaen", "peppers_jay", "Crayola888", "Goog1234Hey", "Molex2_5"]
-    search_words = ["retweet to win", "retweet giveaway", "steam giveaway", "amazon giveaway", "giftcard giveaway"]
+    search_words = ["retweet to win", "retweet giveaway", "steam giveaway", "game giveaway", "giftcard giveaway"]
     filtered_words = ["bot", "b0t", "comment", "screenshot", "proof", "sugar", "sugardaddy", "sugarbaby", "robux", "sugar baby", "sugar momma", "porn", "roblox", "sex", "fortnite", "vbuck", "account"]
     filtered_users = ["bot", "b0t", "spotter", "sp0tter", "sugar", "sugardaddy", "sugarbaby", "robux", "sugar baby", "sugar momma", "porn", "roblox", "sex", "fortnite", "vbuck", "followandrt2win", "muckzuckerburg", "retweeejt", "SookRiviegrave1", "munching1983", "Mary1983sel", "FaBell85_Ind"]
