@@ -266,7 +266,7 @@ class Bot:
                     print("\tRetweeted")
                     botInfo.total_tweets_since_start += 1
                     return 1
-                except tweepy.TweepError as e:
+                except Exception as e:
                     print("\tError retweeting:\n" + e)
                     return 0
             else:
