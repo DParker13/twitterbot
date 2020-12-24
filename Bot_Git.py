@@ -39,8 +39,7 @@ class Bot:
                         #gathers tweet information for debugging or allowing for more information
                         user = tweet.user
                         id = tweet.id
-
-                        print("\t\t" + url)
+                        url = 'https://twitter.com/' + user.screen_name +  '/status/' + str(id)
 
                         #some tweets are longer than normal and require different ways to gather the tweet text
                         try:
@@ -273,7 +272,7 @@ class Bot:
             else:
                 print("\tAlready retweeted - " + url)
                 return 0
-                
+
         print("\tNo retweet in text - " + url)
         return 0
 
