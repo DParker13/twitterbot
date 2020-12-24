@@ -31,7 +31,7 @@ class Bot:
                         time.sleep(5)
 
                     #grabs all the tweets and decides whether or not to like, retweet, or follow them
-                    for tweet in tweepy.Cursor(botInfo.api.search, q=filtered_search, lang="en", since=botInfo.date_since, tweet_mode = "extended").items(botInfo.TWEET_SEARCH_LIMIT + (overflow_count * botInfo.OVERFLOW_EXTRA_SEARCHES)):
+                    for tweet in tweepy.Cursor(botInfo.api.search, q=filtered_search, lang="en", since=botInfo.date_since, tweet_mode = "extended", result_type="popular").items(botInfo.TWEET_SEARCH_LIMIT + (overflow_count * botInfo.OVERFLOW_EXTRA_SEARCHES)):
                         if current_search_counter > botInfo.TWEET_LIMIT_PER_SEARCH:
                             print("Tweet limit reached for search")
                             break
@@ -128,7 +128,7 @@ class Bot:
                         time.sleep(5)
 
                     #grabs all the tweets and decides whether or not to like or retweet (following has been removed)
-                    for tweet in tweepy.Cursor(botInfo.api.search, q=filtered_search, lang="en", since=botInfo.date_since, tweet_mode = "extended").items(botInfo.TWEET_SEARCH_LIMIT + (overflow_count * botInfo.OVERFLOW_EXTRA_SEARCHES)):
+                    for tweet in tweepy.Cursor(botInfo.api.search, q=filtered_search, lang="en", since=botInfo.date_since, tweet_mode = "extended", result_type="popular").items(botInfo.TWEET_SEARCH_LIMIT + (overflow_count * botInfo.OVERFLOW_EXTRA_SEARCHES)):
                         if current_search_counter > botInfo.TWEET_LIMIT_PER_SEARCH:
                             print("Tweet limit reached for search")
                             break
