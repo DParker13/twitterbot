@@ -39,7 +39,6 @@ class Bot:
                         #gathers tweet information for debugging or allowing for more information
                         user = tweet.user
                         id = tweet.id
-                        url = 'https://twitter.com/' + user.screen_name +  '/status/' + str(id)
 
                         print("\t\t" + url)
 
@@ -70,7 +69,7 @@ class Bot:
 
                         #only likes, retweets, or follows if the tweet passes all the filters
                         if tweet_passes_filter == True:
-                            retweet_status = self.Retweet(botInfo, tweet, text)
+                            retweet_status = self.Retweet(url, botInfo, tweet, text)
 
                             if retweet_status != 0:
                                 print("\tSuccessfully passed filters - " + url)
@@ -176,7 +175,7 @@ class Bot:
 
                         #likes, retweets, or adds cashapp username if the tweet passes all the filters
                         if tweet_passes_filter == True:
-                            retweet_status = self.Retweet(botInfo, tweet, text)
+                            retweet_status = self.Retweet(url, botInfo, tweet, text)
 
                             if retweet_status != 0:
                                 print("\tSuccessfully passed filters - " + url)
@@ -260,7 +259,7 @@ class Bot:
             except tweepy.TweepError as e:
                 DoNothing = None
 
-    def Retweet(self, botInfo, tweet, text):
+    def Retweet(self, url, botInfo, tweet, text):
         if "retweet" in text or "rt" in text:
             if not tweet.retweeted:
                 try:
@@ -269,7 +268,13 @@ class Bot:
                     botInfo.total_tweets_since_start += 1
                     return 1
                 except tweepy.TweepError as e:
+                    print("\tError retweeting: likely already retweeted")
                     return 0
+            else:
+                print("\tAlready retweeted - " + url)
+                return 0
+                
+        print("\tNo retweet in text - " + url)
         return 0
 
     def Follow(self, botInfo, tweet, text, user):
