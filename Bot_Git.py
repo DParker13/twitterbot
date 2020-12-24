@@ -8,7 +8,7 @@ class Bot:
             new_tweet_counter = 0
 
             #runs through all custom searches and finds tweets within this search
-            for current_search in botInfo.search_words:
+            for current_search in botInfo.search_words_main:
                 #adds filters to the main search word to remove retweets and replies
                 filtered_search = current_search + " -filter:retweets -filter:replies"
 
@@ -41,6 +41,8 @@ class Bot:
                         id = tweet.id
                         url = 'https://twitter.com/' + user.screen_name +  '/status/' + str(id)
 
+                        print("\t\t" + url)
+
                         #some tweets are longer than normal and require different ways to gather the tweet text
                         try:
                             text = tweet.retweeted_status.full_text.lower()
@@ -51,21 +53,27 @@ class Bot:
                         tweet_passes_filter = True
                         for word_filter in botInfo.filtered_words:
                             if word_filter in text:
-                                print("\tFailed filter because of word: " + word_filter + " - " + url)
+                                print("\tFailed filter because of word: \"" + word_filter + "\" - " + url)
                                 tweet_passes_filter = False
+                                break
+
+                        #skips the rest of the filters if it fails the tests
+                        if tweet_passes_filter == False:
+                            continue
 
                         #check for bot spotters or other annoying users
                         for user_filter in botInfo.filtered_users:
                             if user_filter in user.screen_name.lower() or user_filter in user.name.lower():
-                                tweet_passes_filter = False
                                 print("\tBot Spotter avoided: " + user.screen_name + " - " + url)
+                                tweet_passes_filter = False
+                                break
 
                         #only likes, retweets, or follows if the tweet passes all the filters
                         if tweet_passes_filter == True:
-                            print("\tSuccessfully passed filters - " + url)
                             retweet_status = self.Retweet(botInfo, tweet, text)
 
                             if retweet_status != 0:
+                                print("\tSuccessfully passed filters - " + url)
                                 self.Follow(botInfo, tweet, text, user)
                                 self.Tag(botInfo, text, user, id)
                                 self.CashApp(botInfo, text, user, id)
@@ -112,7 +120,7 @@ class Bot:
                 self.RunMainBot(botInfo)
 
             #runs through all custom searches and finds tweets within this search
-            for current_search in botInfo.search_words:
+            for current_search in botInfo.search_words_backup:
                 #adds filters to the main search word to remove retweets and replies
                 filtered_search = current_search + " -filter:retweets -filter:replies"
 
@@ -148,23 +156,30 @@ class Bot:
 
                         #checks the tweet for any competition rules that can't work with this bot
                         tweet_passes_filter = True
+
                         for word_filter in botInfo.filtered_words:
                             if word_filter in text:
-                                print("\tFailed filter because of word: " + word_filter + " - " + url)
+                                print("\tFailed filter because of word: \"" + word_filter + "\" - " + url)
                                 tweet_passes_filter = False
+                                break
+
+                        #skips the rest of the filters if it fails the tests
+                        if tweet_passes_filter == False:
+                            continue
 
                         #check for bot spotters or other annoying users
                         for user_filter in botInfo.filtered_users:
                             if user_filter in user.screen_name.lower() or user_filter in user.name.lower():
-                                tweet_passes_filter = False
                                 print("\tBot Spotter avoided: " + user.screen_name + " - " + url)
+                                tweet_passes_filter = False
+                                break
 
                         #likes, retweets, or adds cashapp username if the tweet passes all the filters
                         if tweet_passes_filter == True:
-                            print("\tSuccessfully passed filters - " + url)
                             retweet_status = self.Retweet(botInfo, tweet, text)
 
                             if retweet_status != 0:
+                                print("\tSuccessfully passed filters - " + url)
                                 self.Tag(botInfo, text, user, id)
                                 self.CashApp(botInfo, text, user, id)
                                 self.Like(tweet, text)

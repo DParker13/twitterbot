@@ -50,6 +50,7 @@ class BotInfo:
 
     #defines search terms
     tag_list = ["James64705453", "CHRISTYSWEENEY1", "WippydeeWaen", "peppers_jay", "Crayola888", "Goog1234Hey", "Molex2_5"]
-    search_words = ["retweet to win", "retweet giveaway", "steam giveaway", "game giveaway", "giftcard giveaway"]
+    search_words_main = ["retweet to win", "retweet giveaway", "steam giveaway", "game giveaway", "giftcard giveaway"]
+    search_words_backup = ["like to win", "giveaway", "steam giveaway", "game giveaway", "giftcard giveaway"]
     filtered_words = ["bot", "b0t", "comment", "screenshot", "proof", "sugar", "sugardaddy", "sugarbaby", "robux", "sugar baby", "sugar momma", "porn", "roblox", "sex", "fortnite", "vbuck", "account"]
     filtered_users = ["bot", "b0t", "spotter", "sp0tter", "sugar", "sugardaddy", "sugarbaby", "robux", "sugar baby", "sugar momma", "porn", "roblox", "sex", "fortnite", "vbuck", "followandrt2win", "muckzuckerburg", "retweeejt", "SookRiviegrave1", "munching1983", "Mary1983sel", "FaBell85_Ind"]
