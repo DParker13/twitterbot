@@ -267,7 +267,7 @@ class Bot:
                     botInfo.total_tweets_since_start += 1
                     return 1
                 except tweepy.TweepError as e:
-                    print("\tError retweeting: likely already retweeted")
+                    print("\tError retweeting:\n" + e)
                     return 0
             else:
                 print("\tAlready retweeted - " + url)
