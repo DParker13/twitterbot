@@ -51,16 +51,18 @@ class Bot:
                         tweet_passes_filter = True
                         for word_filter in botInfo.filtered_words:
                             if word_filter in text:
+                                print("\tFailed filter because of word: " + word_filter + " - " + url)
                                 tweet_passes_filter = False
 
                         #check for bot spotters or other annoying users
                         for user_filter in botInfo.filtered_users:
                             if user_filter in user.screen_name.lower() or user_filter in user.name.lower():
                                 tweet_passes_filter = False
-                                print("\tBot Spotter avoided: " + user.screen_name)
+                                print("\tBot Spotter avoided: " + user.screen_name + " - " + url)
 
                         #only likes, retweets, or follows if the tweet passes all the filters
                         if tweet_passes_filter == True:
+                            print("\tSuccessfully passed filters - " + url)
                             retweet_status = self.Retweet(botInfo, tweet, text)
 
                             if retweet_status != 0:
@@ -148,16 +150,18 @@ class Bot:
                         tweet_passes_filter = True
                         for word_filter in botInfo.filtered_words:
                             if word_filter in text:
+                                print("\tFailed filter because of word: " + word_filter + " - " + url)
                                 tweet_passes_filter = False
 
                         #check for bot spotters or other annoying users
                         for user_filter in botInfo.filtered_users:
                             if user_filter in user.screen_name.lower() or user_filter in user.name.lower():
                                 tweet_passes_filter = False
-                                print("\tBot Spotter avoided: " + user.screen_name)
+                                print("\tBot Spotter avoided: " + user.screen_name + " - " + url)
 
                         #likes, retweets, or adds cashapp username if the tweet passes all the filters
                         if tweet_passes_filter == True:
+                            print("\tSuccessfully passed filters - " + url)
                             retweet_status = self.Retweet(botInfo, tweet, text)
 
                             if retweet_status != 0:
