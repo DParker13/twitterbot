@@ -1,5 +1,7 @@
-import tweepy, time, sys, datetime
 from os import environ
+
+import datetime
+import tweepy
 
 
 class BotInfo:
@@ -11,23 +13,14 @@ class BotInfo:
         self.CASHAPP = "NormanRoss04"
 
         # search settings
-        self.TWEET_SEARCH_LIMIT = 25
-        self.SEARCH_TIMER = 30 * 60
-        self.LIKE_RETWEET_ONLY_TIMER = 30 * 60
-        self.TWEET_LIMIT_PER_SEARCH = 5
-        self.RUNS_BEFORE_SWITCH = 4
-        self.OVERFLOW_SEARCH_REPEAT = 3
-        self.OVERFLOW_EXTRA_SEARCHES = 20
+        self.TWEET_SEARCH_LIMIT = 200
 
-        # limits before removing old tweets or likes
-        self.TWEET_LIMIT = 3000
-        self.TWEET_RESET_LIMIT = 1000
-        self.FRIEND_LIMIT = 2600
-        self.FRIEND_RESET_LIMIT = 1200
+        self.TWEET_LIMITER = False
+        self.TWEET_LIMIT_PER_SEARCH = 20
 
-        # dates
-        self.GO_BACK_TIME = 5
-        self.DELETE_DATE = datetime.datetime.utcnow() - datetime.timedelta(days=self.GO_BACK_TIME)
+        self.SEARCH_TIMER = 25  # in minutes
+        self.LIKE_RETWEET_ONLY_TIMER = 25  # in minutes
+        self.RUNS_BEFORE_SWITCH = 10
 
         # counters
         self.total_tweets_since_start = 0
@@ -52,8 +45,8 @@ class BotInfo:
     # defines search terms
     tag_list = ["James64705453", "CHRISTYSWEENEY1", "WippydeeWaen", "peppers_jay", "Crayola888", "Goog1234Hey",
                 "Molex2_5"]
-    search_words_main = ["retweet to win", "retweet giveaway", "steam giveaway", "game giveaway", "giftcard giveaway"]
-    search_words_backup = ["like to win", "giveaway", "steam giveaway", "game giveaway", "giftcard giveaway"]
+    search_words_main = ["retweet to win", "retweet giveaway", "steam retweet giveaway", "game retweet giveaway", "giftcard retweet giveaway", "follow giveaway"]
+    search_words_backup = ["retweet to win", "retweet giveaway", "steam retweet giveaway", "game retweet giveaway", "giftcard retweet giveaway"]
     filtered_words = ["bot", "b0t", "comment", "screenshot", "proof", "sugar", "sugardaddy", "sugarbaby", "robux",
                       "sugar baby", "sugar momma", "porn", "roblox", "sex", "fortnite", "vbuck", "account"]
     filtered_users = ["bot", "b0t", "spotter", "sp0tter", "sugar", "sugardaddy", "sugarbaby", "robux", "sugar baby",
