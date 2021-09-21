@@ -73,10 +73,12 @@ class Bot:
 
                             if retweet_status != 0:
                                 print("\tSuccessfully passed filters - " + url)
+                                
                                 self.follow(bot_info, tweet, text, user)
-                                Bot.tag(bot_info, text, user, tweet_id)
+                                # Bot.tag(bot_info, text, user, tweet_id) DEPRECATED
                                 Bot.cash_app(bot_info, text, user, tweet_id)
                                 Bot.like(tweet, text)
+
                                 current_search_counter += 1
                                 new_tweet_counter += 1
                             else:
@@ -175,7 +177,7 @@ class Bot:
                             if retweet_status != 0:
                                 print("\tSuccessfully passed filters - " + url)
 
-                                self.tag(bot_info, text, user, tweet_id)
+                                # self.tag(bot_info, text, user, tweet_id) DEPRECATED
                                 Bot.cash_app(bot_info, text, user, tweet_id)
                                 Bot.like(tweet, text)
 

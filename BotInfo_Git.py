@@ -47,7 +47,7 @@ class BotInfo:
                 "Molex2_5"]
     search_words_main = ["retweet to win", "retweet giveaway", "steam retweet giveaway", "game retweet giveaway", "giftcard retweet giveaway", "follow giveaway"]
     search_words_backup = ["retweet to win", "retweet giveaway", "steam retweet giveaway", "game retweet giveaway", "giftcard retweet giveaway"]
-    filtered_words = ["bot", "b0t", "comment", "screenshot", "proof", "sugar", "sugardaddy", "sugarbaby", "robux",
+    filtered_words = ["bot", "b0t", "comment", "tag", "screenshot", "proof", "sugar", "sugardaddy", "sugarbaby", "robux",
                       "sugar baby", "sugar momma", "porn", "roblox", "sex", "fortnite", "vbuck", "account"]
     filtered_users = ["bot", "b0t", "spotter", "sp0tter", "sugar", "sugardaddy", "sugarbaby", "robux", "sugar baby",
                       "sugar momma", "porn", "roblox", "sex", "fortnite", "vbuck", "followandrt2win", "muckzuckerburg",
