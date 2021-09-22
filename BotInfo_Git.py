@@ -51,4 +51,4 @@ class BotInfo:
                       "sugar baby", "sugar momma", "porn", "roblox", "sex", "fortnite", "vbuck", "account"]
     filtered_users = ["bot", "b0t", "spotter", "sp0tter", "sugar", "sugardaddy", "sugarbaby", "robux", "sugar baby",
                       "sugar momma", "porn", "roblox", "sex", "fortnite", "vbuck", "followandrt2win", "muckzuckerburg",
-                      "retweeejt", "SookRiviegrave1", "munching1983", "Mary1983sel", "FaBell85_Ind"]
+                      "retweeejt", "SookRiviegrave1", "munching1983", "Mary1983sel", "FaBell85_Ind", "fakeTakeDump"]
